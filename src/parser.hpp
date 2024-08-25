@@ -91,7 +91,49 @@ public:
             case '+': addToken(Token::Type::PLUS     , "+"); break;
             case ';': addToken(Token::Type::SEMICOLON, ";"); break;
             case '*': addToken(Token::Type::ASTERISK , "*"); break;
+            case '!': {
+                match('=')
+                    ? addToken(Token::Type::NOTEQ, "!=")
+                    : addToken(Token::Type::NOT, "!");
+            } break;
+            case '=': {
+                match('=')
+                    ? addToken(Token::Type::EQEQ, "==")
+                    : addToken(Token::Type::EQ, "=");
+            } break;
+            case '<': {
+                match('=')
+                    ? addToken(Token::Type::LTEQ, "<=")
+                    : addToken(Token::Type::LT, "<");
+            } break;
+            case '>': {
+                match('=')
+                    ? addToken(Token::Type::GTEQ, ">=")
+                    : addToken(Token::Type::GT, ">");
+            } break;
+
+            default:
+                error(line, "Unexpected character.");
+                break;
         }
+    }
+
+    char peek() {
+        if (at_end()) return '\0';
+        return source[current+1];
+    }
+
+    bool match(char expected) {
+        if (at_end()) return false;
+        if (source[current] != expected) return false;
+
+        current++;
+        return true;
+    }
+
+    void error(size_t line, const std::string& message) {
+        had_error = true;
+        std::cerr << "[line " << line << "] Error: " << message << std::endl;
     }
 
     std::list<Token> scan_tokens() {
@@ -126,6 +168,7 @@ public:
     bool at_end() { return current >= source.size(); }
 
 private:
+    bool had_error = false;
     std::string source;
     size_t start = 0;
     size_t current = 0;
