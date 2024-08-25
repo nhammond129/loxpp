@@ -111,6 +111,13 @@ public:
                     ? addToken(Token::Type::GTEQ, ">=")
                     : addToken(Token::Type::GT, ">");
             } break;
+            case '/': {
+                if (match('/')) {
+                    while (peek() != '\n' && !at_end()) advance();
+                } else {
+                    addToken(Token::Type::SLASH, "/");
+                }
+            } break;
 
             default:
                 error(line, "Unexpected character.");
