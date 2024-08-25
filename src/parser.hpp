@@ -127,7 +127,7 @@ public:
 
     char peek() {
         if (at_end()) return '\0';
-        return source[current+1];
+        return source[current];
     }
 
     bool match(char expected) {
