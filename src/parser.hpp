@@ -72,7 +72,6 @@ public:
             return std::to_string(static_cast<unsigned int>(type)) + " " + lexeme;
         }
     }
-
 };
 
 class Scanner {
@@ -128,8 +127,9 @@ public:
 
 private:
     std::string source;
-    size_t start, current;
-    size_t line;
-    size_t linepos;
+    size_t start = 0;
+    size_t current = 0;
+    size_t line = 1;
+    size_t linepos = 0;
     std::list<Token> tokens;
 };
