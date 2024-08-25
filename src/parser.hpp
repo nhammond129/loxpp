@@ -118,6 +118,11 @@ public:
                     addToken(Token::Type::SLASH, "/");
                 }
             } break;
+            case ' ' :
+            case '\r':
+            case '\t':
+            case '\n':  // line tracking handled in advance();
+                break;  // Ignore whitespace
 
             default:
                 error(line, "Unexpected character.");
