@@ -148,6 +148,19 @@ public:
         return true;
     }
 
+    bool isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+
+    bool isAlpha(char c) {
+        return (c >= 'a' && c <= 'z') ||
+               (c >= 'A' && c <= 'Z');
+    }
+
+    bool isAlphanumeric(char c) {
+        return isAlpha(c) || isDigit(c);
+    }
+
     void error(size_t line, const std::string& message) {
         had_error = true;
         std::cerr << "[line " << line << "] Error: " << message << std::endl;
