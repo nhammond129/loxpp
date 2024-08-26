@@ -85,7 +85,7 @@ void Lexer::scan_token() {
 
             advance();  // Consume closing "
             std::string value = source.substr(start + 1, current - start - 2);
-            addToken(Token::Type::STRING, value, Literal(value));
+            addToken(Token::Type::STRING, value, Token::Literal(value));
         } break;
 
         default:
@@ -97,7 +97,7 @@ void Lexer::scan_token() {
                     while (isDigit(peek())) advance();
                 }
 
-                addToken(Token::Type::NUMBER, source.substr(start, current - start), Literal(std::stod(source.substr(start, current - start))));
+                addToken(Token::Type::NUMBER, source.substr(start, current - start), Token::Literal(std::stod(source.substr(start, current - start))));
             } else if (isAlpha(c)) {
                 while (isAlphanum(peek()) || peek() == '_') advance();
 
@@ -121,7 +121,7 @@ void Lexer::scan_token() {
                 else if (text == "while" ) type = Token::Type::WHILE;
                 else {
                     type = Token::Type::IDENTIFIER;
-                    addToken(type, text, Literal(Identifier(text)));
+                    addToken(type, text, Token::Literal(Token::Identifier(text)));
                     break;
                 }
                 addToken(type, text);
@@ -183,7 +183,7 @@ void Lexer::error(size_t line, const std::string& message) {
     std::cerr << "[line " << line << "] Lexing Error: " << message << std::endl;
 }
 
-void Lexer::addToken(Token::Type type, std::string lexeme, Literal literal) {
+void Lexer::addToken(Token::Type type, std::string lexeme, Token::Literal literal) {
     tokens.push_back(Token {type, lexeme, literal, line});
 }
 

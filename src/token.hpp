@@ -4,34 +4,35 @@
 #include <string>
 #include <variant>
 
-class Identifier {
-public:
-    constexpr Identifier(std::string name) : name(name) {}
-    std::string name;
-};
-
-struct Literal {
-    std::variant<Identifier, std::string, double> value;
-    Literal(Identifier value) : value(value) {}
-    Literal(std::string value) : value(value) {}
-    Literal(double value) : value(value) {}
-
-    operator std::string() const {
-        return std::visit([](auto&& arg) -> std::string {
-            using T = std::decay_t<decltype(arg)>;
-            if constexpr (std::is_same_v<T, Identifier>) {
-                return arg.name;
-            } else if constexpr (std::is_same_v<T, std::string>) {
-                return arg;
-            } else if constexpr (std::is_same_v<T, double>) {
-                return std::to_string(arg);
-            }
-        }, value);
-    }
-};
 
 class Token {
 public:
+    class Identifier {
+    public:
+        constexpr Identifier(std::string name) : name(name) {}
+        std::string name;
+    };
+
+    struct Literal {
+        std::variant<Identifier, std::string, double> value;
+        Literal(Identifier value) : value(value) {}
+        Literal(std::string value) : value(value) {}
+        Literal(double value) : value(value) {}
+
+        operator std::string() const {
+            return std::visit([](auto&& arg) -> std::string {
+                using T = std::decay_t<decltype(arg)>;
+                if constexpr (std::is_same_v<T, Identifier>) {
+                    return arg.name;
+                } else if constexpr (std::is_same_v<T, std::string>) {
+                    return arg;
+                } else if constexpr (std::is_same_v<T, double>) {
+                    return std::to_string(arg);
+                }
+            }, value);
+        }
+    };
+
     struct Type {
         enum class type_t {
             // Single-char tokens

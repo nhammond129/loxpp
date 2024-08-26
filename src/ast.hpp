@@ -2,7 +2,7 @@
 
 #include <variant>
 
-#include "tokens.hpp"
+#include "token.hpp"
 
 class Expr {}; // class Expr
 
@@ -32,3 +32,11 @@ public:
 private:
     Expr subexpr;
 }; // class Grouping
+
+class Literal : public Expr {
+public:
+    Literal(Token::Literal value) : value(value) {}
+
+private:
+    Token::Literal value;
+}; // class Literal

@@ -2,7 +2,7 @@
 #include <list>
 #include <iostream>
 
-#include "tokens.hpp"
+#include "token.hpp"
 
 class Lexer {
 public:
@@ -25,7 +25,7 @@ public:
 
     void addToken(Token::Type type);
     void addToken(Token::Type type, std::string lexeme);
-    void addToken(Token::Type type, std::string lexeme, Literal literal);
+    void addToken(Token::Type type, std::string lexeme, Token::Literal literal);
 
     void error(size_t line, const std::string& message);
 
