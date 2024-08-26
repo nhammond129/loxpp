@@ -135,6 +135,11 @@ public:
         return source[current];
     }
 
+    char peekNext() {
+        if (current + 1 >= source.size()) return '\0';
+        return source[current + 1];
+    }
+
     bool match(char expected) {
         if (at_end()) return false;
         if (source[current] != expected) return false;
