@@ -114,6 +114,23 @@ public:
             case '/': {
                 if (match('/')) {
                     while (peek() != '\n' && !at_end()) advance();
+                } else if(match('*')) {
+                    size_t nesting = 1;
+                    while (nesting > 0 && !at_end()) {
+                        if (peek() == '/' && peekNext() == '*') {
+                            nesting++;
+                            advance();  // Consume '/'
+                        } else if (peek() == '*' && peekNext() == '/') {
+                            nesting--;
+                            advance();  // Consume '*'
+                        }
+                        advance();  // Consume second-half of comment-delim or intermediate char
+                    }
+
+                    if (at_end() && nesting > 0) {
+                        error(line, "Unterminated block comment.");
+                        return;
+                    }
                 } else {
                     addToken(Token::Type::SLASH, "/");
                 }
@@ -177,8 +194,8 @@ public:
                     }
                     addToken(type, text);
                 } else {
-                error(line, "Unexpected character.");
-                break;
+                    error(line, "Unexpected character.");
+                    break;
                 }
         }
     }
