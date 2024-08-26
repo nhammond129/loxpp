@@ -36,6 +36,7 @@ private:
 class Literal : public Expr {
 public:
     Literal(Token::Literal value) : value(value) {}
+    Literal() : value(Token::Literal()) {}
 
 private:
     Token::Literal value;

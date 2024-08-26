@@ -2,7 +2,7 @@
 
 #include <list>
 
-#include "tokens.hpp"
+#include "token.hpp"
 #include "ast.hpp"
 
 class Parser {
@@ -15,13 +15,12 @@ private:
     Expr expression();
     Expr equality();
     Expr comparison();
-    Expr addition();
-    Expr multiplication();
+    Expr term();
     Expr unary();
     Expr primary();
 
-    bool match(const std::list<Token::Type>& types);
-    bool check(const Token::Type& type);
+    bool match(const std::list<Token::Token::Type>& types);
+    bool check(const Token::Token::Type& type);
 
     void advance();
     Token peek();
@@ -33,7 +32,6 @@ private:
     void error(const Token& token, const std::string& message);
 
     std::list<Token> tokens;
-    std::list<Token>::const_iterator start = tokens.begin();
     std::list<Token>::const_iterator current = tokens.begin();
 
 }; // class Parser
