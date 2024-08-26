@@ -123,6 +123,21 @@ public:
             case '\t':
             case '\n':  // line tracking handled in advance();
                 break;  // Ignore whitespace
+            case '"': { // String literals
+                while (peek() != '"' && !at_end()) {
+                    if (peek() == '\n') line++;
+                    advance();
+                }
+
+                if (at_end()) {
+                    error(line, "Unterminated string.");
+                    return;
+                }
+
+                advance();  // Consume closing "
+                std::string value = source.substr(start + 1, current - start - 2);
+                addToken(Token::Type::STRING, value, Literal(value));
+            } break;
 
             default:
                 error(line, "Unexpected character.");
