@@ -13,14 +13,15 @@ public:
         std::string name;
     };
 
-    struct Literal {
-        std::variant<Identifier, std::string, double> value;
+    class Literal {
+    public:
         Literal(Identifier value) : value(value) {}
         Literal(std::string value) : value(value) {}
         Literal(double value) : value(value) {}
+        Literal() : value(std::monostate{}) {}
 
         operator std::string() const {
-            return std::visit([](auto&& arg) -> std::string {
+            return std::visit([&](auto&& arg) -> std::string {
                 using T = std::decay_t<decltype(arg)>;
                 if constexpr (std::is_same_v<T, Identifier>) {
                     return arg.name;
@@ -28,9 +29,13 @@ public:
                     return arg;
                 } else if constexpr (std::is_same_v<T, double>) {
                     return std::to_string(arg);
+                } else if constexpr (std::is_same_v<T, std::monostate>) {
+                    return "nil";
                 }
             }, value);
         }
+
+        std::variant<Identifier, std::string, double, std::monostate> value;
     };
 
     struct Type {
