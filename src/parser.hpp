@@ -140,8 +140,46 @@ public:
             } break;
 
             default:
+                if (isDigit(c)) {
+                    while (isDigit(peek())) advance();
+
+                    if (peek() == '.' && isDigit(peekNext())) {
+                        advance();  // Consume '.'
+                        while (isDigit(peek())) advance();
+                    }
+
+                    addToken(Token::Type::NUMBER, source.substr(start, current - start), Literal(std::stod(source.substr(start, current - start))));
+                } else if (isAlpha(c)) {
+                    while (isAlphanumeric(peek()) || peek() == '_') advance();
+
+                    std::string text = source.substr(start, current - start);
+                    Token::Type type;
+                    if      (text == "and"   ) type = Token::Type::AND;
+                    else if (text == "class" ) type = Token::Type::CLASS;
+                    else if (text == "else"  ) type = Token::Type::ELSE;
+                    else if (text == "false" ) type = Token::Type::FALSE;
+                    else if (text == "for"   ) type = Token::Type::FOR;
+                    else if (text == "fun"   ) type = Token::Type::FUN;
+                    else if (text == "if"    ) type = Token::Type::IF;
+                    else if (text == "nil"   ) type = Token::Type::NIL;
+                    else if (text == "or"    ) type = Token::Type::OR;
+                    else if (text == "print" ) type = Token::Type::PRINT;
+                    else if (text == "return") type = Token::Type::RETURN;
+                    else if (text == "super" ) type = Token::Type::SUPER;
+                    else if (text == "this"  ) type = Token::Type::THIS;
+                    else if (text == "true"  ) type = Token::Type::TRUE;
+                    else if (text == "var"   ) type = Token::Type::VAR;
+                    else if (text == "while" ) type = Token::Type::WHILE;
+                    else {
+                        type = Token::Type::IDENTIFIER;
+                        addToken(type, text, Literal(Identifier(text)));
+                        break;
+                    }
+                    addToken(type, text);
+                } else {
                 error(line, "Unexpected character.");
                 break;
+                }
         }
     }
 
