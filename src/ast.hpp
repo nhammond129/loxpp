@@ -4,16 +4,9 @@
 
 #include "tokens.hpp"
 
-class Expr {
-    Expr(BinaryOp expr) : expr(expr) {}
-    Expr(UnaryOp  expr) : expr(expr) {}
-    Expr(Literal  expr) : expr(expr) {}
-    Expr(Grouping expr) : expr(expr) {}
+class Expr {}; // class Expr
 
-    std::variant<BinaryOp, UnaryOp, Literal, Grouping> expr;
-}; // class Expr
-
-class BinaryOp {
+class BinaryOp : public Expr {
 public:
     BinaryOp(Expr left, Token op, Expr right) : left(left), op(op), right(right) {}
 
@@ -23,7 +16,7 @@ private:
     Expr right;
 }; // class BinaryOp
 
-class UnaryOp {
+class UnaryOp : public Expr {
 public:
     UnaryOp(Token op, Expr right) : op(op), right(right) {}
 
@@ -32,10 +25,10 @@ private:
     Expr right;
 }; // class UnaryOp
 
-class Grouping {
+class Grouping : public Expr {
 public:
-    Grouping(Expr expr) : expr(expr) {}
+    Grouping(Expr expr) : subexpr(expr) {}
 
 private:
-    Expr expr;
+    Expr subexpr;
 }; // class Grouping
