@@ -184,6 +184,10 @@ public:
         tokens.push_back(Token {type, lexeme, line});
     }
 
+    void addToken(Token::Type type, std::string lexeme, Literal literal) {
+        tokens.push_back(Token {type, lexeme, literal, line});
+    }
+
     char advance() {
         if (at_end()) return '\0';
         char c = source[current++];
